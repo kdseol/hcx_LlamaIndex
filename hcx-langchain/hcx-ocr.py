@@ -5,8 +5,15 @@ import base64
 import json
 import pprint
 
-api_url = 'https://q93lwb0cm8.apigw.ntruss.com/custom/v1/44031/2e56f044f18c5334e14a68e185c39d326e309a555a5c4c62a52bbc9619e21e70/general'
-secret_key = 'WUt2eGhhYXllUVptYnVMbkJ0Z2tDRmJ3WmxvZkRBSlA='
+from dotenv import load_dotenv
+from pathlib import Path
+
+# .env 파일 경로 명시적 로드 (기본: 현재 디렉토리)
+load_dotenv(dotenv_path=Path(__file__).parent / "../.env")
+
+HCX_OCR_API_URL = os.getenv("HCX_OCR_API_URL")
+HCX_OCR_SECRET_KEY = os.getenv("HCX_OCR_SECRET_KEY")
+
 
 image_file = './sample.pdf'
 
@@ -29,11 +36,11 @@ request_json = {
 
 payload = json.dumps(request_json).encode('UTF-8')
 headers = {
-  'X-OCR-SECRET': secret_key,
+  'X-OCR-SECRET': HCX_OCR_SECRET_KEY,
   'Content-Type': 'application/json'
 }
 
-response = requests.request("POST", api_url, headers=headers, data = payload)
+response = requests.request("POST", HCX_OCR_API_URL, headers=headers, data = payload)
 #print(response.text)
 
 response_json = json.loads(response.text)
